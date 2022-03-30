@@ -1,7 +1,10 @@
 Private Sub CommandButton1_Click()
 
     Dim empty_cells As Long
-         
+    
+    
+    ' TODO CHECK IF UNE FACTURE EXISTE + PB DATE
+    
          
     ' Vérifier pour chaque cellule de la liste (Array) si celle-ci est vide
     ' Si elle est vide, changer la couleur et ajouter 1 à la variable empty_cells
@@ -39,16 +42,13 @@ Private Sub CommandButton1_Click()
     ' Si la ligne est vide, j'insère la valeur correspondante, sinon j'arrête la boucle.
     
     
-    ' DATE
-    For Each mydate In Range("K21:K100")
-        If IsEmpty(mydate.Value) Then
-            mydate.Value = Date
-            Exit For
-        End If
-    Next mydate
-    
     ' NUMERO DE FACTURE
     For Each invoice_num In Range("L21:L100")
+        If invoice_num.Value = Range("C15") Then  'JE VERIFIE QUE LE NUMERO DE FACTURE N'EXISTE PAS DEJA
+            MsgBox "Ce numéro de facture existe déjà !" & Chr(10) & "Merci d'en choisir un autre."
+            Exit Sub
+        End If
+        
         If IsEmpty(invoice_num.Value) Then
             invoice_num.Value = Range("C15").Value
             Exit For
@@ -56,6 +56,14 @@ Private Sub CommandButton1_Click()
         End If
      
     Next invoice_num
+    
+    ' DATE
+    For Each mydate In Range("K21:K100")
+        If IsEmpty(mydate.Value) Then
+            mydate.Value = Date
+            Exit For
+        End If
+    Next mydate
     
     
     ' NUMERO D'ARTICLE
