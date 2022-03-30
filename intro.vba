@@ -2,9 +2,6 @@ Private Sub CommandButton1_Click()
 
     Dim empty_cells As Long
     
-    
-    ' TODO CHECK IF UNE FACTURE EXISTE + PB DATE
-    
          
     ' Vérifier pour chaque cellule de la liste (Array) si celle-ci est vide
     ' Si elle est vide, changer la couleur et ajouter 1 à la variable empty_cells
