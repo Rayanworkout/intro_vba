@@ -2,6 +2,8 @@ Private Sub CommandButton1_Click()
     
     ' Vérifier pour chaque cellule de la liste (Array) si celle-ci est vide OU que sa valeur n'est pas numérique
     ' Si elle est vide ou non numérique, je change sa couleur, je notifie l'utilisateur et j'arrête le script
+    ' Avec une boucle plutôt qu'une suite de if, il sera aisé d'ajouter des cases devant être remplies
+    ' Cette boucle peut égaement servir autre part
     
     For Each myCell In Array(Range("C15"), Range("C17"), Range("C25"), Range("G25"))
         If IsEmpty(myCell.Value) Then
@@ -174,5 +176,5 @@ Private Sub CommandButton2_Click()
     
     ' J'envoie la confirmation de création du fichier
     CreateObject("WScript.Shell").PopUp "Fichier .CSV créé.", 1, "Succès", 0
-     
+      
 End Sub
