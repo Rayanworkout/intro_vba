@@ -9,7 +9,7 @@ Private Sub CommandButton1_Click()
     
     For Each myCell In Array(Range("C15"), Range("C17"), Range("C25"), Range("G25"))
         If IsEmpty(myCell.Value) Then
-            myCell.Interior.ColorIndex = 6
+            myCell.Interior.ColorIndex = 3
             empty_cells = empty_cells + 1
         ElseIf Not IsEmpty(myCell.Value) Then
             myCell.Interior.ColorIndex = 2
@@ -18,14 +18,12 @@ Private Sub CommandButton1_Click()
     
     ' Si il n'y a qu'une case vide, envoyer le message au singulier puis arrêter le programme
     If empty_cells = 1 Then
-        MsgBox _
-    "Une case obligatoire est vide."
+        CreateObject("WScript.Shell").PopUp "UNE CASE OBLIGATOIRE EST VIDE.", 2, "Cases manquantes", 0
     Exit Sub
     
     ' Si + d'une case est vide, envoyer le message au pluriel puis arrêter le programme.
     ElseIf empty_cells > 1 Then
-        MsgBox _
-        "" & empty_cells & " cases obligatoires sont vides."
+        CreateObject("WScript.Shell").PopUp "" & empty_cells & " CASES OBLIGATOIRES SONT VIDES.", 2, "Cases manquantes", 0
         Exit Sub
     
     End If
@@ -42,7 +40,7 @@ Private Sub CommandButton1_Click()
     ' NUMERO DE FACTURE
     For Each invoice_num In Range("L21:L100")
         If invoice_num.Value = Range("C15") Then  'JE VERIFIE QUE LE NUMERO DE FACTURE N'EXISTE PAS DEJA
-            MsgBox "Ce numéro de facture existe déjà !" & Chr(10) & "Merci d'en choisir un autre."
+            CreateObject("WScript.Shell").PopUp "Ce numéro de facture existe déjà !" & Chr(10) & "Merci d'en choisir un autre.", 3, "Facture existante", 0
             Exit Sub
         End If
         
@@ -127,4 +125,33 @@ Private Sub CommandButton1_Click()
      
     Next discount
     
+    CreateObject("WScript.Shell").PopUp "Enregistrement réussi.", 1, "Facture ajoutée", 0
+
+    
+End Sub
+        
+   
+Private Sub CommandButton2_Click()
+    
+    If IsEmpty(Range("K21").Value) Then
+        CreateObject("WScript.Shell").PopUp "Enregistrez d'abord une facture dans le panier.", 1, "Panier vide", 0
+        Exit Sub
+    End If
+    
+    Dim sheetExists As Boolean
+    
+    For Each Sheet In Worksheets
+        If Sheet.Name = "Facture" Then
+            sheetExists = True
+            Exit For
+        End If
+    Next Sheet
+    
+    If Not sheetExists Then
+        Sheets.Add(After:=Sheets("Panier")).Name = "Facture"
+    End If
+    
+         
+    Worksheets("Facture").Range("A1:H15") = Range("K21:R35").Value
+        
 End Sub
