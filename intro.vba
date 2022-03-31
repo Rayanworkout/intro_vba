@@ -1,12 +1,7 @@
 Private Sub CommandButton1_Click()
-
     
-    ' TODO EMPECHER DE METTRE DES INFORMATIONS ERRONEES DANS LES CASES
-    
-         
-    ' Vérifier pour chaque cellule de la liste (Array) si celle-ci est vide
-    ' Si elle est vide, changer la couleur et ajouter 1 à la variable empty_cells
-    ' La variable empty_cells contient le nombre de cases vides, on l'incrémente à chaque tour de boucle
+    ' Vérifier pour chaque cellule de la liste (Array) si celle-ci est vide OU que sa valeur n'est pas numérique
+    ' Si elle est vide ou non numérique, je change sa couleur, je notifie l'utilisateur et j'arrête le script
     
     For Each myCell In Array(Range("C15"), Range("C17"), Range("C25"), Range("G25"))
         If IsEmpty(myCell.Value) Then
@@ -43,7 +38,7 @@ Private Sub CommandButton1_Click()
     For Each invoice_num In Range("L21:L100")
         If invoice_num.Value = Range("C15") Then  'JE VERIFIE QUE LE NUMERO DE FACTURE N'EXISTE PAS DEJA
             CreateObject("WScript.Shell").PopUp "La facture n° " & Range("C15").Value & " existe déjà ." & _
-            Chr(10) & Chr(10) & "Merci d'en choisir un autre.", 3, "Facture existante", 0
+            Chr(10) & Chr(10) & "Merci de choisir un autre numéro.", 3, "Facture existante", 0
             Exit Sub
         End If
         
@@ -166,7 +161,7 @@ Private Sub CommandButton2_Click()
     
     ' J'exporte le contenu de la feuille "Facture" dans un fichier .csv
     ThisWorkbook.Sheets("Facture").Copy
-    ActiveWorkbook.SaveAs Filename:=Application.ThisWorkbook.Path & "/Facture.csv", _
+    ActiveWorkbook.SaveAs Filename:=Application.ThisWorkbook.Path & "/Facture_" & VBA.Format(VBA.Now, "dd-MM").csv", _
                           FileFormat:=xlCSV, _
                           CreateBackup:=False
     ActiveWorkbook.Close
