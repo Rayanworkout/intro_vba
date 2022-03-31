@@ -161,7 +161,7 @@ Private Sub CommandButton2_Click()
     
     ' J'exporte le contenu de la feuille "Facture" dans un fichier .csv
     ThisWorkbook.Sheets("Facture").Copy
-    ActiveWorkbook.SaveAs Filename:=Application.ThisWorkbook.Path & "/Facture_" & VBA.Format(VBA.Now, "dd-MM").csv", _
+    ActiveWorkbook.SaveAs Filename:=Application.ThisWorkbook.Path & "/Facture_" & VBA.Format(VBA.Now, "dd-MM") & ".csv", _
                           FileFormat:=xlCSV, _
                           CreateBackup:=False
     ActiveWorkbook.Close
@@ -174,7 +174,5 @@ Private Sub CommandButton2_Click()
     
     ' J'envoie la confirmation de création du fichier
     CreateObject("WScript.Shell").PopUp "Fichier .CSV créé.", 1, "Succès", 0
-    
-    
-        
+     
 End Sub
