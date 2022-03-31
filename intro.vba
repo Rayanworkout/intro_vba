@@ -1,5 +1,9 @@
 Private Sub CommandButton1_Click()
 
+    
+    ' TODO EMPECHER DE METTRE DES INFORMATIONS ERRONEES DANS LES CASES
+    
+    
     Dim empty_cells As Long
     
          
@@ -125,21 +129,23 @@ Private Sub CommandButton1_Click()
      
     Next discount
     
-    CreateObject("WScript.Shell").PopUp "Enregistrement réussi.", 1, "Facture ajoutée", 0
-
-    
 End Sub
         
    
 Private Sub CommandButton2_Click()
+    
+    ' BOUTON POUR EXPORTER LES FACTURES AU FORMAT CSV
+    
+    Dim sheetExists As Boolean
+    
+    ' Si la case K21 (première date) est vide, je demande d'enregistrer une première facture et j'arrête l'opération
     
     If IsEmpty(Range("K21").Value) Then
         CreateObject("WScript.Shell").PopUp "Enregistrez d'abord une facture dans le panier.", 1, "Panier vide", 0
         Exit Sub
     End If
     
-    Dim sheetExists As Boolean
-    
+    ' Je vérifie si le
     For Each Sheet In Worksheets
         If Sheet.Name = "Facture" Then
             sheetExists = True
@@ -148,10 +154,25 @@ Private Sub CommandButton2_Click()
     Next Sheet
     
     If Not sheetExists Then
-        Sheets.Add(After:=Sheets("Panier")).Name = "Facture"
+        Sheets.Add(After:=Sheets("Stocks")).Name = "Facture"
     End If
     
          
     Worksheets("Facture").Range("A1:H15") = Range("K21:R35").Value
-        
+    
+    Application.DisplayAlerts = False
+    
+    ThisWorkbook.Sheets("Facture").Copy
+    ActiveWorkbook.SaveAs Filename:=Application.ThisWorkbook.Path & "/Facture.csv", _
+                          FileFormat:=xlCSV, _
+                          CreateBackup:=False
+    ActiveWorkbook.Close
+    
+    
+    Worksheets("Facture").Delete
+    
+    Application.DisplayAlerts = True
+    
+    CreateObject("WScript.Shell").PopUp "Fichier .CSV créé.", 1, "Succès", 0
+     
 End Sub
