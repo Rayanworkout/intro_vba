@@ -1,11 +1,11 @@
 Private Sub CommandButton1_Click()
     
-    ' Je commence par insérer la date dans la cellule dédiée.
+    ' Je commence par insérer la date dans la cellule dédiée
     Range("C16") = Date
     
     
-    ' Je vérifie pour chaque cellule de la liste, je vérifie si elle n'est pas vide, si sa valeur est bien numérique et si elle est positive
-    ' Si elle est vide, non numérique ou négative, je change sa couleur, je notifie l'utilisateur et j'arrête le script.
+    ' Pour chaque cellule de la liste, je vérifie si elle n'est pas vide, si sa valeur est bien numérique et si elle est positive
+    ' Si elle est vide, non numérique ou négative, je change sa couleur, je notifie l'utilisateur et j'arrête le script
     
     For Each mycell In Array(Range("C15"), Range("C26"), Range("G26"))
         If IsEmpty(mycell.Value) Then
@@ -35,7 +35,7 @@ Private Sub CommandButton1_Click()
     
     
     ' NUMERO FACTURE
-    ' J'ajoute le numéro de facture dans la case dédiée si la case est vide.
+    ' J'ajoute le numéro de facture dans la case dédiée si la case est vide
     ' J'empêche l'utilisateur de changer de numéro de facture avec un panier rempli
     
     If IsEmpty(Range("J22").Value) Then
@@ -49,7 +49,7 @@ Private Sub CommandButton1_Click()
     
     
     ' NUMERO CLIENT
-    ' Si la case est vide, j'insère le numéro client.
+    ' Si la case est vide, j'insère le numéro client
     ' Si elle n'est pas vide, j'empêche l'utilisateur de changer de client si des articles sont dans le panier
     
     If IsEmpty(Range("K22").Value) Then
@@ -145,7 +145,7 @@ Private Sub CommandButton2_Click()
     Set FSO = CreateObject("Scripting.FileSystemObject")
     Set wfile = FSO.CreateTextFile(Application.ThisWorkbook.Path & "/Facture_" & invoice & "_" & customer & "_" & VBA.Format(VBA.Now, "dd-MM") & ".csv", 2) 'connection for writing
     
-    ' Sur lequel j'écris le contenu de la variable, puis j'enregistre
+    ' Sur lequel j'écris le contenu de la variable que j'ai créée, puis j'enregistre
     wfile.WriteLine content
     wfile.Close
     
