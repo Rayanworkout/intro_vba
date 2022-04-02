@@ -1,0 +1,6 @@
+Cup'Rocher	Cœur: Nutella  Crème: ganache chocolat   Décoration: ferrero rocher 		
+Cup'FlowerBerry	Cœur: Confiture de Fraise  Crème: ganache cœur de rose   Décoration: paillettes alimentaires		
+SpéCup'Cakes	Cœur: Crème de Spéculos   crème: ganache vanille    Décoration: biscuit spéculos		
+Cup'Croquant	Cœur: Caramel Beurre Salée  Crème: ganache vanille   Décoration:  noix de pécan		
+Cup'ChocoBerry	Cœur:  Confiture de Framboise  Crème: ganache eau de rose   Décoration: une framboise 		
+Apple Cup'Crumbles 	Cœur: Confit de Pomme   Crème:  ganache vanille  Décoration: un tranche de pomme		
