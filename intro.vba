@@ -124,7 +124,7 @@ Private Sub CommandButton2_Click()
     ' Si la case L22 (premier article) est vide, je demande d'enregistrer un article et j'arrête l'opération
     
     If IsEmpty(Range("L22").Value) Then
-        CreateObject("WScript.Shell").PopUp "Aucun article ne figure dans le panier.", 1, "Panier vide", 0
+        CreateObject("WScript.Shell").PopUp "Aucun article ne figure dans le panier.", 3, "Panier vide", 0
         Exit Sub
     End If
     
@@ -171,16 +171,44 @@ End Sub
 
 Private Sub CommandButton4_Click()
 
-    ' BOUTON DE GENERATION DE FACTURE AU FORMAT PDF
+    ' GENERATION DE FACTURE AU FORMAT PDF
+    
+    ' Si la case L22 (premier article) est vide, je demande d'enregistrer un article et j'arrête l'opération
+    
+    If IsEmpty(Range("L22").Value) Then
+        CreateObject("WScript.Shell").PopUp "Aucun article ne figure dans le panier.", 3, "Panier vide", 0
+        Exit Sub
+    End If
     
     ' Je déclare le sheet template en temps que variabe pour travailler avec
     Dim ws As Worksheet
     Set ws = ActiveWorkbook.Worksheets("Template")
     
     ' Je modifie le template en fonction des informations du panier
+    
+    ' Type de doc
     ws.Range("F1") = "FACTURE"
-    ws.Range("F2") = Range("C15")
+    ' Numéro
+    ws.Range("F2") = Range("J22")
+    ' Date
     ws.Range("F3") = Range("C16")
+    ' Infos client
+    ws.Range("G5:I9") = Range("F15:I21").Value
+    
+    ' Ajouter les articles du panier à la facture
+    For Each cell In Range("L22:O24")
+        If Not IsEmpty(cell.Value) Then
+            content = content & cell.Value & " "
+            If cell.Column = 15 Then
+                content = Left(content, Len(content) - 1) & vbNewLine
+            End If
+        ElseIf IsEmpty(cell.Value) Then
+            Exit For
+        End If
+    Next cell
+    
+    MsgBox content
+    
     
     'Save Active Sheet(s) as PDF
     'Sheets("Template").ExportAsFixedFormat Type:=xlTypePDF, _
