@@ -1,5 +1,9 @@
 Private Sub CommandButton1_Click()
     
+    ' TODO GENERER DEVIS / FACTURE / BON DE COMMANDE
+    
+    
+    
     ' Je commence par insérer la date dans la cellule dédiée
     Range("C16") = Date
     
@@ -54,7 +58,7 @@ Private Sub CommandButton1_Click()
     
     If IsEmpty(Range("K22").Value) Then
         Range("K22").Value = Range("C18").Value
-    ElseIf Not IsEmpty(Range("J23").Value) And Range("J23").Value <> Range("C18").Value Then
+    ElseIf Not IsEmpty(Range("K22").Value) And Range("K22").Value <> Range("C18").Value Then
         CreateObject("WScript.Shell").PopUp "Avant de modifier le numéro du client, vous devez exporter son panier puis " & _
         "le réinitialiser.", 10, _
             "Changement de client", 48
@@ -126,7 +130,7 @@ Private Sub CommandButton2_Click()
     
     
     ' Numéro de facture et numéro client qui vont servir pour le nom du fichier
-    invoice = Range("J22").Value
+    doc_number = Range("J22").Value
     customer = Range("K22").Value
     
     ' Je loop à travers chaque cellule qui contient les articles enregistrés afin de composer "manuellement"
@@ -134,16 +138,20 @@ Private Sub CommandButton2_Click()
     ' à chaque fois que je rencontre la colonne 15, qui est la dernière valeur
     
     For Each cell In Range("L22:O24")
-        content = content & cell.Value & ", "
-        If cell.Column = 15 Then
-            content = content & vbNewLine
+        If Not IsEmpty(cell.Value) Then
+            content = content & cell.Value & ";"
+            If cell.Column = 15 Then
+                content = Left(content, Len(content) - 1) & vbNewLine
+            End If
+        ElseIf IsEmpty(cell.Value) Then
+            Exit For
         End If
     Next cell
     
     
     ' Je crée ensuite un objet d'écriture système
     Set FSO = CreateObject("Scripting.FileSystemObject")
-    Set wfile = FSO.CreateTextFile(Application.ThisWorkbook.Path & "/Facture_" & invoice & "_" & customer & "_" & VBA.Format(VBA.Now, "dd-MM") & ".csv", 2) 'connection for writing
+    Set wfile = FSO.CreateTextFile(Application.ThisWorkbook.Path & "/Panier_" & doc_number & "_Client_" & customer & ".csv", 2)
     
     ' Sur lequel j'écris le contenu de la variable que j'ai créée, puis j'enregistre
     wfile.WriteLine content
@@ -155,6 +163,33 @@ Private Sub CommandButton2_Click()
 End Sub
 
 Private Sub CommandButton3_Click()
-' BOUTON DE REINITIALISATION DU PANIER
-Range("J22:N26").ClearContents
+    
+    ' BOUTON DE REINITIALISATION DU PANIER
+    Range("J22:N26").ClearContents
+    
+End Sub
+
+Private Sub CommandButton4_Click()
+
+    ' BOUTON DE GENERATION DE FACTURE AU FORMAT PDF
+    
+    ' Je déclare le sheet template en temps que variabe pour travailler avec
+    Dim ws As Worksheet
+    Set ws = ActiveWorkbook.Worksheets("Template")
+    
+    ' Je modifie le template en fonction des informations du panier
+    ws.Range("F1") = "FACTURE"
+    ws.Range("F2") = Range("C15")
+    ws.Range("F3") = Range("C16")
+    
+    'Save Active Sheet(s) as PDF
+    'Sheets("Template").ExportAsFixedFormat Type:=xlTypePDF, _
+    'Filename:=Application.ThisWorkbook.Path & "/Facture.pdf"
+    
+    ' Je confirme la création du fichier à l'utilisateur
+    CreateObject("WScript.Shell").PopUp "Facture créée avec succès.", 3, _
+            "Succès", 0
+
+
+
 End Sub
