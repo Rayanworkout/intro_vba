@@ -1,6 +1,4 @@
 Private Sub CommandButton1_Click()
-
-    ' EMPECHER D'ECRIRE DANS LES CELLULES NON PREVUES
     
     ' AJOUTER ARTICLE AU PANIER
     
@@ -45,9 +43,10 @@ Private Sub CommandButton1_Click()
     If IsEmpty(Range("L12").Value) Then
         Range("L12").Value = CInt(Range("C20").Value)
     ElseIf Not IsEmpty(Range("L12").Value) And Range("L12").Value <> Range("C20").Value Then
-        CreateObject("WScript.Shell").PopUp "Avant d'éditer un autre document, vous devez exporter le panier client puis " & _
+        CreateObject("WScript.Shell").PopUp "Avant d'éditer un autre document, vous devez exporter le panier client ou " & _
         "le réinitialiser.", 10, _
             "Document non finalisé", 48
+        Range("C20") = Range("L12").Value
         
     End If
     
@@ -59,10 +58,11 @@ Private Sub CommandButton1_Click()
     If IsEmpty(Range("M12").Value) Then
         Range("M12").Value = Range("C13").Value
     ElseIf Not IsEmpty(Range("M12").Value) And Range("M12").Value <> Range("C13").Value Then
-        CreateObject("WScript.Shell").PopUp "Avant de modifier le numéro du client, vous devez exporter son panier puis " & _
+        CreateObject("WScript.Shell").PopUp "Avant de modifier le numéro du client, vous devez exporter son panier ou " & _
         "le réinitialiser.", 10, _
             "Changement de client", 48
         
+        Range("C13") = Range("M12").Value
     End If
     
     
@@ -330,7 +330,10 @@ Private Sub CommandButton6_Click()
     
     ' Je déclare le sheet template en temps que variabe pour travailler avec
     Dim ws As Worksheet
+    Dim clients As Worksheet
+    
     Set ws = ActiveWorkbook.Worksheets("Template")
+    Set clients = ActiveWorkbook.Worksheets("Fiche clients")
     
     ' Je modifie le template en fonction des informations du panier
     
@@ -369,10 +372,16 @@ Private Sub CommandButton6_Click()
     ws.Range("C36:E37") = Range("O17")
     ws.Range("F36:F37") = Range("P17")
     ws.Range("H36:H37") = Range("Q17")
+    
+    cout = ws.Range("H38").Value
         
     ' Exporter le template complété au format PDF
     Sheets("Template").ExportAsFixedFormat Type:=xlTypePDF, _
     Filename:=Application.ThisWorkbook.Path & "/BC.pdf"
+    
+    ' Je met à jour le fichier client avec une vente et du volume de ventes supplémentaires
+    clients.Range("L17").Offset(rowoffset:=Range("C13")) = clients.Range("L17").Offset(rowoffset:=Range("C13")) + 1
+    clients.Range("M17").Offset(rowoffset:=Range("C13")) = clients.Range("M17").Offset(rowoffset:=Range("C13")) + cout
     
     ' Réinitialiser le template
     ws.Range("C26:F37") = ""
@@ -382,6 +391,7 @@ Private Sub CommandButton6_Click()
     ws.Range("H13") = ""
     ws.Range("H15") = ""
     ws.Range("E17") = ""
+    
     
     ' Je confirme la création du fichier à l'utilisateur
     CreateObject("WScript.Shell").PopUp "Bon de commande créé avec succès.", 3, _
